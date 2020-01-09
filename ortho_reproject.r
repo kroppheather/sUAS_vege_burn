@@ -13,10 +13,10 @@
 ###################################################
 #######packages                             #######
 ###################################################
-install.packages(c("rgdal"),lib ="/home/hkropp/R")
 
-library(sp, lib ="/home/hkropp/R")
-library(raster, lib ="/home/hkropp/R")
+
+library(sp)
+library(raster)
 
 
 ###################################################
@@ -27,9 +27,9 @@ library(raster, lib ="/home/hkropp/R")
 # data directory        #
 #########################
 #input directory to reproject
-dataDir <- "/home/hkropp/ortho/stereo"
+dataDir <- "z:\\projects\\vege_burn_siberia_2019\\ortho_stereo"
 #output directory
-dataOut <- "/home/hkropp/ortho/laea"
+dataOut <- "z:\\projects\\vege_burn_siberia_2019\\ortho_laea"
 
 
 ###################################################
@@ -40,25 +40,29 @@ dataOut <- "/home/hkropp/ortho/laea"
 # rgb orthos            #
 #########################
 #get names for all tif files
-filesAll <- list.files(dataDir)
+filesIn <- list.files(dataDir)
 
+#check files in out
+filesOut <- list.files(dataOut)
 
+#files to reproject
+#returns zero if no matching output file
+fileMatch <- match(filesIn, filesOut,0)
+
+#files to run won't have a match (marked with zero above)
+filesRun <- filesIn[fileMatch == 0]
 
 #read in all orthos
 rasterRGB <- list()
-for(i in 1:length(filesAll)){
-	rasterRGB[[i]] <- stack(paste0(dataDir, filesAll[i]))
+for(i in 1:length(filesRun)){
+	rasterRGB[[i]] <- stack(paste0(dataDir, "\\",filesAll[i]))
 }
 
 
-plotRGB(rasterRGB[[1]])
-plotRGB(rasterRGB[[2]])
-str(rasterRGB[[2]])
+laea <- "+proj=laea +lat_0=90 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
+#reproject and save file
+for(i in 1:length(filesRun)){
 
-
-laea <- "+proj=laea +lat_0=90 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs" 
-test <- projectRaster(rasterRGB[[1]],res=res(rasterRGB[[1]])[1],crs=laea,progress='text')
-
-
-
-plotRGB(rasterRGB[[2]])
+	reproject <- projectRaster(rasterRGB[[1]],res=res(rasterRGB[[1]])[1],crs=laea,progress='text')
+	writeRaster(reproject,paste0(dataOut,"\\",filesRun),format="GTiff")
+}
