@@ -64,5 +64,7 @@ laea <- "+proj=laea +lat_0=90 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +towgs84=0,0,0
 for(i in 1:length(filesRun)){
 
 	reproject <- projectRaster(rasterRGB[[1]],res=res(rasterRGB[[1]])[1],crs=laea,progress='text')
-	writeRaster(reproject,paste0(dataOut,"\\",filesRun),format="GTiff")
+	writeRaster(reproject,paste0(dataOut,"\\",filesRun[1]),format="GTiff")
 }
+plotRGB(reproject)
+plotRGB(rasterRGB[[2]])
