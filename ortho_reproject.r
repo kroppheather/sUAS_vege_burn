@@ -13,9 +13,9 @@
 ###################################################
 #######packages                             #######
 ###################################################
-#install.packages(c("sp"), lib="/home/hkropp/R3.6.1")
-#install.packages(c("raster"), lib="/home/hkropp/R3.6.1")
-#install.packages(c("rgdal"), lib="/home/hkropp/R3.6.1")
+#install.packages(c("sp"), lib="/home/hkropp/R3.6.2")
+#install.packages(c("raster"), lib="/home/hkropp/R3.6.2")
+#install.packages(c("rgdal"), lib="/home/hkropp/R3.6.2")
 
 #library(sp, lib="/home/hkropp/R3.6.1")
 #library(raster, lib="/home/hkropp/R3.6.1")
@@ -63,8 +63,12 @@ laea <- "+proj=laea +lat_0=90 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +towgs84=0,0,0
 #reproject and save file
 for(i in 1:length(filesRun)){
 	rasterRGB <- stack(paste0(dataDir, "\\",filesRun[i]))
-	reproject <- projectRaster(rasterRGB[[1]],res=res(rasterRGB[[1]])[1],crs=laea,progress='text')
+	print(paste("read",filesRun[i]))
+	reproject <- projectRaster(rasterRGB[[i]],res=res(rasterRGB[[i]])[1],crs=laea,progress='text')
+	print(paste("finish",filesRun[i]))
 	writeRaster(reproject,paste0(dataOut,"\\",filesRun[1]),format="GTiff")
+	print(paste("write",filesRun[i]))
+	gc()
 }
 
 
