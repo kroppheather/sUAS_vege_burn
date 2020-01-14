@@ -41,7 +41,7 @@ uDir <- "z:\\"
 #directory for project
 dataDir <- paste0(uDir,"projects\\vege_burn_siberia_2019")
 #folder for rgb images
-rgbDir <- paste0(dataDir,"\\ortho_laea")
+rgbDir <- paste0(dataDir,"\\ortho_stereo")
 #folder with flight metadata
 flightDir <- paste0(dataDir,"\\flight_info")
 
@@ -53,7 +53,7 @@ flightDir <- paste0(dataDir,"\\flight_info")
 # rgb orthos            #
 #########################
 #get names for all tif files
-filesAll <- list.files(paste0(dataDir,"\\ortho_laea"))
+filesAll <- list.files(paste0(dataDir,"\\ortho_stereo"))
 
 #select tif files only
 #since there are many .tif.ovr ect type files need to subset so only looking at tif
@@ -85,7 +85,6 @@ flights <- read.csv(paste0(flightDir,"\\flight_meta.csv"))
 #######set up transects to match flights    #######
 ###################################################
 rasterRGB[[1]]@crs
-laea <- "+proj=laea +lat_0=90 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
 
 fl3 <- SpatialPoints(data.frame(x=gcps$lon[gcps$flight == 3],y=gcps$lat[gcps$flight == 3]),
 		crs("+init=epsg:4326"))
@@ -93,8 +92,8 @@ fl3 <- SpatialPoints(data.frame(x=gcps$lon[gcps$flight == 3],y=gcps$lat[gcps$fli
 fl3r <- spTransform(fl3, rasterRGB[[1]]@crs)
 
 par(mai=c(1,1,1,1))
-plot(c(0,1),c(0,1),xlab=" ", ylab=" ", axes=FALSE,xlim=c(767198, 771938), ylim=c(2317989,2331890))
-plotRGB(rasterRGB[[1]], add =TRUE)
+
+plotRGB(rasterRGB[[1]])
 
 
 plot(fl3r, pch=19, col="red", add =TRUE)
