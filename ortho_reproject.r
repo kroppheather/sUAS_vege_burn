@@ -63,18 +63,19 @@ laea <- "+proj=aea +lat_1=50 +lat_2=70 +lat_0=56 +lon_0=100 +x_0=0 +y_0=0 +ellps
 i <- 1 
 rasterRGB <- brick(paste0(dataDir, "\\",filesRun[i]))
 	print(paste("read",filesRun[i]))
-	reproject <- projectRaster(rasterRGB[[i]],res=res(rasterRGB[[i]])[1],crs=laea,progress='text')
+	reproject <- projectRaster(rasterRGB,res=res(rasterRGB)[1],crs=laea,progress='text')
 	print(paste("finish",filesRun[i]))
-	writeRaster(reproject,paste0(dataOut,"\\",filesRun[1]),format="GTiff")
+	writeRaster(reproject,paste0(dataOut,"\\",filesRun[i]),format="GTiff")
 	print(paste("write",filesRun[i]))
 	
+gc()	
 #reproject and save file
-for(i in 1:length(filesRun)){
+for(i in 2:length(filesRun)){
 	rasterRGB <- brick(paste0(dataDir, "\\",filesRun[i]))
 	print(paste("read",filesRun[i]))
-	reproject <- projectRaster(rasterRGB[[i]],res=res(rasterRGB[[i]])[1],crs=laea,progress='text')
+	reproject <- projectRaster(rasterRGB,res=res(rasterRGB[[i]])[1],crs=laea,progress='text')
 	print(paste("finish",filesRun[i]))
-	writeRaster(reproject,paste0(dataOut,"\\",filesRun[1]),format="GTiff")
+	writeRaster(reproject,paste0(dataOut,"\\",filesRun[i]),format="GTiff")
 	print(paste("write",filesRun[i]))
 	gc()
 }
