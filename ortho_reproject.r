@@ -58,11 +58,19 @@ fileMatch <- match(filesIn, filesOut,0)
 filesRun <- filesIn[fileMatch == 0]
 
 
-laea <- "+proj=laea +lat_0=90 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
-
+laea <- "+proj=aea +lat_1=50 +lat_2=70 +lat_0=56 +lon_0=100 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs "
+#test first 1
+i <- 1 
+rasterRGB <- brick(paste0(dataDir, "\\",filesRun[i]))
+	print(paste("read",filesRun[i]))
+	reproject <- projectRaster(rasterRGB[[i]],res=res(rasterRGB[[i]])[1],crs=laea,progress='text')
+	print(paste("finish",filesRun[i]))
+	writeRaster(reproject,paste0(dataOut,"\\",filesRun[1]),format="GTiff")
+	print(paste("write",filesRun[i]))
+	
 #reproject and save file
 for(i in 1:length(filesRun)){
-	rasterRGB <- stack(paste0(dataDir, "\\",filesRun[i]))
+	rasterRGB <- brick(paste0(dataDir, "\\",filesRun[i]))
 	print(paste("read",filesRun[i]))
 	reproject <- projectRaster(rasterRGB[[i]],res=res(rasterRGB[[i]])[1],crs=laea,progress='text')
 	print(paste("finish",filesRun[i]))
