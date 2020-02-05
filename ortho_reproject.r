@@ -67,7 +67,10 @@ rasterRGB <- brick(paste0(dataDir, "\\",filesRun[i]))
 	print(paste("finish",filesRun[i]))
 	writeRaster(reproject,paste0(dataOut,"\\",filesRun[i]),format="GTiff")
 	print(paste("write",filesRun[i]))
+	plotRGB(reproject)
 	
+testRGB <- brick(paste0(dataOut,"\\",filesRun[i]))	
+	plotRGB(testRGB)
 gc()	
 #reproject and save file
 for(i in 2:length(filesRun)){
